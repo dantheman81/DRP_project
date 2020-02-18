@@ -4,14 +4,19 @@
 ### Table of Contents
 
 1. [Installation](#installation)
-1. [Instructions](#instructions)
-2. [Project Motivation](#motivation)
+2. [Instructions](#instructions)
 3. [File Descriptions](#files)
 5. [Licensing, Authors, and Acknowledgements](#licensing)
 
 ## Installation <a name="installation"></a>
 
-There should be no necessary libraries to run the code here beyond the Anaconda distribution of Python.  The code should run with no issues using Python versions 3.*. testtest
+The basis for running this code is the Anaconda distribution of Python.  The code should run with no issues using Python versions 3.*.
+
+Dependencies:
+Machine Learning Libraries: NumPy, SciPy, Pandas, Sciki-Learn
+Natural Language Process Libraries: NLTK
+SQLlite Database Libraqries: SQLalchemy
+Web App and Data Visualization: Flask, Plotly
 
 ### Instructions <a name="instructions"></a>
 1. Run the following commands in the project's root directory to set up your database and model.
@@ -26,28 +31,26 @@ There should be no necessary libraries to run the code here beyond the Anaconda 
 
 3. Go to http://0.0.0.0:3001/
 
-## Project Motivation<a name="motivation"></a>
-
-For this project, I was interestested in using Stack Overflow data from 2017 to better understand:
-
-1.) In which countries are the developers most happy?
-
-2.) Does the provided equipment seem to influence the job satisfaction?
-
-3.) Are developers that are able to invest a lot of time in improving their tooling more happy than the average developers?
-
-The full set of files related to this course are owned by Udacity, so they are not publicly available here.  However, you can see pieces of the analysis here.  
-
 ## File Descriptions <a name="files"></a>
 
-There is a notebooks available here to showcase work related to the above questions.  The notebooks is exploratory in searching through the data pertaining to the questions showcased by the section for each question.  Markdown cells were used to assist in walking through the thought process for individual steps.  
+There is notebooks available here to showcase the work how to find .  The notebooks is exploratory in searching through the data pertaining to the questions showcased by the section for each question.  Markdown cells were used to assist in walking through the thought process for individual steps.  
 
-## Results<a name="results"></a>
+- app
+| - template
+| |- master.html  # main page of web app
+| |- go.html  # classification result page of web app
+|- run.py  # Flask file that runs app
 
-The main findings of the code can be found at the post available [here](https://medium.com/@dan.gunnarsson/factors-for-developer-job-satisfaction-c2865e6c4373).
+- data
+|- disaster_categories.csv  # data to process 
+|- disaster_messages.csv  # data to process
+|- process_data.py # python program to load and process the input data
+|- InsertDatabaseName.db   # database to save clean data to
+
+- models
+|- train_classifier.py # python program to build and train a pipeline to predict which categories are matched by one message.
+|- classifier.pkl  # saved model 
 
 ## Licensing, Authors, Acknowledgements<a name="licensing"></a>
 
-I give credit to Stack Overflow for the data.  You can find the Licensing for the data and other descriptive information at the Kaggle link available [here](https://www.kaggle.com/stackoverflow/so-survey-2017/data).  Otherwise, feel free to use the code here as you would like! 
-
-
+I give credit to Figure 8 for the data and Udacity for the project description and ideas.  Otherwise, feel free to use the code here as you would like! 
