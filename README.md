@@ -35,6 +35,7 @@ Web App and Data Visualization: Flask, Plotly
 
 There is notebooks available here to showcase the work how to find .  The notebooks is exploratory in searching through the data pertaining to the questions showcased by the section for each question.  Markdown cells were used to assist in walking through the thought process for individual steps.  
 
+```
 - app
 | - template
 | |- master.html  # main page of web app
@@ -50,6 +51,7 @@ There is notebooks available here to showcase the work how to find .  The notebo
 - models
 |- train_classifier.py # python program to build and train a pipeline to predict which categories are matched by one message.
 |- classifier.pkl  # saved model 
+```
 
 ## Licensing, Authors, Acknowledgements<a name="licensing"></a>
 
