@@ -8,6 +8,7 @@ from nltk.tokenize import word_tokenize
 from flask import Flask
 from flask import render_template, request, jsonify
 from plotly.graph_objs import Bar
+from plotly.graph_objs import Heatmap
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -70,6 +71,9 @@ def index():
     category_names = df.iloc[:,4:].columns
     category_counts = (df.iloc[:,4:] != 0).sum().values
 
+    Y = df.iloc[:,4:]
+    category_correlation = Y.corr()
+
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
     graphs = [
@@ -108,6 +112,20 @@ def index():
                     'title': "Category",
                     'tickangle': 35
                 }
+            }
+        },
+        {
+            'data': [
+                Heatmap(
+                    z=category_correlation.values,
+                    x=category_names,
+                    y=category_names
+                )
+            ],
+
+            'layout': {
+                'title': 'Categories Correlation',
+                'height': 1000
             }
         }
     ]

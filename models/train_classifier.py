@@ -32,7 +32,7 @@ from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.metrics import make_scorer, accuracy_score, f1_score, fbeta_score, classification_report, multilabel_confusion_matrix
-
+from sklearn.model_selection import GridSearchCV
 
 def load_data(database_filepath):
     """Loads the messages and categories data from SQLlite database
@@ -129,7 +129,16 @@ def build_model():
 
         ('clf', MultiOutputClassifier(AdaBoostClassifier()))
     ])
-    return pipeline
+
+    parameters = {
+        'features__text_pipeline__vect__ngram_range': ((1, 1), (1, 2)),
+        'features__text_pipeline__vect__max_df': (0.75, 1.0),
+        'features__text_pipeline__vect__max_features': (None, 5000),
+        'features__text_pipeline__tfidf__use_idf': (True, False)
+    }
+
+    cv = GridSearchCV(pipeline, param_grid=parameters)
+    return cv
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
