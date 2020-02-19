@@ -1,3 +1,15 @@
+"""
+Script to create a ML pipeline to create a classifier for classifying
+messages during a distaster.
+
+Sample script execution:
+python train_classifier.py DisasterResponse.db classifier.pkl
+
+Arguments:
+    1) SQL Database with pre-processed data (DisasterResponse.db)
+    2) Model file to save model pipeline (classifier.pkl)
+"""
+
 # import libraries
 import sys
 import nltk
@@ -23,6 +35,22 @@ from sklearn.metrics import make_scorer, accuracy_score, f1_score, fbeta_score, 
 
 
 def load_data(database_filepath):
+    """Loads the messages and categories data from SQLlite database
+
+    Parameters
+    ----------
+    database_filepath : str
+        The message file including path
+
+    Returns
+    -------
+    X : DataFrame
+        Pandas DataFrame containing the features
+    Y : DataFrame
+        Pandas DataFrame containing the labels
+    category_names : List
+        Category names
+    """
     engine = create_engine('sqlite:///'+ database_filepath)
     df = pd.read_sql_table('InsertTableName',engine)
     X = df['message']
@@ -31,6 +59,18 @@ def load_data(database_filepath):
     return X, Y, category_names
 
 def tokenize(text):
+    """Tokenize a sentence into word tokens and cleaning up URLs
+
+    Parameters
+    ----------
+    text : str
+        The message as text
+
+    Returns
+    -------
+    clean_tokes : list
+        List with the individual words
+    """
     url_regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
     detected_urls = re.findall(url_regex, text)
     for url in detected_urls:
@@ -48,7 +88,7 @@ def tokenize(text):
 
 class StartingVerbExtractor(BaseEstimator, TransformerMixin):
     """
-    Starting Verb Extractor class
+    Starting Verb Extractor class re-used from Udacity Program Data Scientist
 
     """
 
@@ -69,6 +109,13 @@ class StartingVerbExtractor(BaseEstimator, TransformerMixin):
         return pd.DataFrame(X_tagged)
 
 def build_model():
+    """Build a ML Pipline for messages classification
+
+    Returns
+    -------
+    pipeline : Pipeline
+        ML Pipline for messages classification
+    """
     pipeline = Pipeline([
         ('features', FeatureUnion([
 
@@ -86,6 +133,19 @@ def build_model():
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
+    """Perform predictions using test data and calculate overall accuracy
+
+    Parameters
+    ----------
+    model : Pipeline
+        ML Pipline for messages classification
+    X_test : DataFrame
+        Pandas DataFrame containing the features from the test set
+    Y_test : DataFrame
+        Pandas DataFrame containing the labels from the test set
+    category_names : List
+        Category names
+    """
     Y_pred = model.predict(X_test)
 
     Y_pred_data_frame = pd.DataFrame(Y_pred, columns = Y_test.columns)
@@ -97,11 +157,30 @@ def evaluate_model(model, X_test, Y_test, category_names):
     print(overall_accuracy)
 
 def save_model(model, model_filepath):
+    """Save the model to a pickle file.
+
+    Parameters
+    ----------
+    model : Pipeline
+        ML Pipline for messages classification
+    model_filepath : str
+        File name for the pickle file to save the model
+    """
     filename = model_filepath
     pickle.dump(model, open(filename, 'wb'))
 
 
 def main():
+    """
+    Main function
+
+    1) Read command line arguments
+    2) Load data and split into training and test sets
+    3) Build model
+    4) Train model
+    5) Evaluate model
+    6) Save model
+    """
     if len(sys.argv) == 3:
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
